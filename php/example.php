@@ -1,24 +1,29 @@
 <?php
 include 'db.php';
 
-session_start();
-
-$display_btn_exit = "none";
-$show_form = "block";
-
-
-$result_query = "";
 
 //коннект к бд
 $connect_sql = new mysqli($servername, $_username, $_password);
 
+
 $db_users = $connect_sql->select_db('auth');
 
 
-//проверяем подключение
-if ($connect_sql->connect_error) {
-  die("Connection failed: " . $connect_sql->connect_error);
+$msg_logout = $_COOKIE['log_msg'];
+
+
+if ($_COOKIE['username'] == '1234'){
+
+ header('Location: /php/index1.php');
+
+
 }
+
+
+//проверяем подключение
+// if ($connect_sql->connect_error) {
+//   die("Connection failed: " . $connect_sql->connect_error);
+// }
 
 // запрос на отображения данных о юзерах
 
@@ -32,30 +37,27 @@ if ($connect_sql->connect_error) {
 //   echo "0 results";
 // }
 
+
+
+
+
+// $user = '1234';
+// $pass = password_hash('1234', PASSWORD_DEFAULT);
+// $sql_enter_pass = "INSERT INTO users (`username`, `password`) VALUES (?, ?)";
+// $stmt1 = $connect_sql->prepare($sql_enter_pass);
+// $stmt1->bind_param('ss', $user, $pass);
+// $stmt1->execute();
+
+
+
+
+
 // обработка пост запроса
-
-
 
 if (($_SERVER["REQUEST_METHOD"] == "POST") && ($connect_sql)) {
 
-  if (isset($_POST['logout'])) {
-    $_SESSION = array();
-    session_destroy();
-
-    $msg_logout = "<p>" . "Вы вышли из сессии" . "</p>";
-  } else {
-
-
     $username_form = $_POST["username"];
     $password_form = $_POST["password"];
-
-
-    // $user = '1234';
-    // $pass = password_hash('1234', PASSWORD_DEFAULT);
-    // $sql_enter_pass = "INSERT INTO users (`username`, `password`) VALUES (?, ?)";
-    // $stmt1 = $connect_sql->prepare($sql_enter_pass);
-    // $stmt1->bind_param('ss', $user, $pass);
-    // $stmt1->execute();
 
 
     // создаем запрос
@@ -82,45 +84,42 @@ if (($_SERVER["REQUEST_METHOD"] == "POST") && ($connect_sql)) {
       // чек паролей
       if (password_verify($password_form, $user['password'])) {
 
-        $_SESSION['loggedin'] = true;
-        $_SESSION['username'] = $username_form;
+        
+        setcookie('username', $username_form, time() + 3600 * 24, '/');
+        setcookie('password', $_POST["password"], time() + 3600 * 24, '/');
+
+        header('Location: /php/index1.php');
 
 
-        $show_form = "none"; // прячем форму
-        $msg_succesfully .= ("<p>" . "Вы успешно авторизировались," . $username_form . "</p>");
 
-        $display_btn_exit = "block";
       } else {
         $error_pass .= ('<p>' . "invalid password" . '</p>');
       }
     } else {
       $error_user .= ('<p>' . "invalid user" . '</p>');
     }
-  }
 }
 ?>
 
 
+
+
+!DOCTYPE html;
+
+<html>
+
+<head>
+  <title>Site</title>
+  <meta charset="utf-8">
+
+
+
+</head>
+
+
+
+
 <body style="background-color: #a7c8fc; display: flex; justify-content:center; align-items:center">
-
-
-  <div style="display: block;">
-
-    <div style="color: #3ccf57; font-size: 64px">
-      <? echo $msg_succesfully ?>
-    </div>
-
-
-    <!-- Кнопка выхода -->
-    <form method="POST" action="<?php $_SERVER['PHP_SELF'] ?>" style="display: <? echo $display_btn_exit ?>;" accept-charset="UTF-8">
-
-      <div style="display: flex; justify-content:center;">
-        <input type='submit' name='logout' value='Выйти' style="height: 50px;">
-      </div>
-
-    </form>
-
-  </div>
 
   <div style="display: <?= $show_form ?> ; justify-content:center; align-items:center; width: 100%" id="form">
 
@@ -165,3 +164,6 @@ if (($_SERVER["REQUEST_METHOD"] == "POST") && ($connect_sql)) {
   </div>
 
 </body>
+
+
+</html>
