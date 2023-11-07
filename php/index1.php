@@ -1,6 +1,9 @@
 <?php
+session_start();
 
-    if(empty($_COOKIE['password'])){
+
+
+    if(empty($_COOKIE['password']) && empty($_COOKIE['username'])){
         header('Location: /php/example.php');
     }
 
@@ -12,6 +15,8 @@
         $msg_logout = "<p>" . "Вы вышли из сессии" . "</p>";
         setcookie('log_msg', $msg_logout, time() + 2, '/php/example.php');
 
+
+        session_destroy();
 
         // чистим куки
         setcookie('username', $username_form, -1, '/');

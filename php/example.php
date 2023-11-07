@@ -2,23 +2,6 @@
 include 'db.php';
 
 
-//коннект к бд
-$connect_sql = new mysqli($servername, $_username, $_password);
-
-
-$db_users = $connect_sql->select_db('auth');
-
-
-$msg_logout = $_COOKIE['log_msg'];
-
-
-if ($_COOKIE['username'] == '1234'){
-
- header('Location: /php/index1.php');
-
-
-}
-
 
 //проверяем подключение
 // if ($connect_sql->connect_error) {
@@ -86,7 +69,7 @@ if (($_SERVER["REQUEST_METHOD"] == "POST") && ($connect_sql)) {
 
         
         setcookie('username', $username_form, time() + 3600 * 24, '/');
-        setcookie('password', $_POST["password"], time() + 3600 * 24, '/');
+        setcookie('password', password_hash($_POST["password"], PASSWORD_DEFAULT), time() + 3600 * 24, '/');
 
         header('Location: /php/index1.php');
 
