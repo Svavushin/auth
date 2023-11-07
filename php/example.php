@@ -103,9 +103,6 @@ if (($_SERVER["REQUEST_METHOD"] == "POST") && ($connect_sql)) {
 
 
 
-
-!DOCTYPE html;
-
 <html>
 
 <head>

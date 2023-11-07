@@ -10,7 +10,7 @@
     if(isset($_POST['logout'])){
         header('Location: /php/example.php');
         $msg_logout = "<p>" . "Вы вышли из сессии" . "</p>";
-        setcookie('log_msg', $msg_logout, time() + 20, '/php/example.php');
+        setcookie('log_msg', $msg_logout, time() + 2, '/php/example.php');
 
 
         // чистим куки
