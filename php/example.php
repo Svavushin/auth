@@ -1,14 +1,11 @@
 <?php
 include 'db.php';
+session_start();
 
-
-
-
-if ($_COOKIE['username'] == '1234'){
-
- header('Location: /php/index1.php');
-
-
+if ($_SESSION['auth'] == true){
+  header('Location: /php/index1.php');
+} else if($_COOKIE['AUTH'] == true){
+  header('Location: /php/index1.php');
 }
 
 
@@ -30,18 +27,12 @@ if ($_COOKIE['username'] == '1234'){
 // }
 
 
-
-
-
 // $user = '1234';
 // $pass = password_hash('1234', PASSWORD_DEFAULT);
 // $sql_enter_pass = "INSERT INTO users (`username`, `password`) VALUES (?, ?)";
 // $stmt1 = $connect_sql->prepare($sql_enter_pass);
 // $stmt1->bind_param('ss', $user, $pass);
 // $stmt1->execute();
-
-
-
 
 
 // обработка пост запроса
@@ -75,14 +66,18 @@ if (($_SERVER["REQUEST_METHOD"] == "POST") && ($connect_sql)) {
 
       // чек паролей
       if (password_verify($password_form, $user['password'])) {
-
         
+        session_start();
+        $_SESSION['auth'] = true;
+        $_SESSION['username'] = $username_form;
+  
         setcookie('username', $username_form, time() + 3600 * 24, '/');
-        setcookie('password', $_POST["password"], time() + 3600 * 24, '/');
+        setcookie('AUTH', true, time() + 3600 * 24, '/');
+
+
 
         header('Location: /php/index1.php');
-
-
+        
 
       } else {
         $error_pass .= ('<p>' . "invalid password" . '</p>');

@@ -1,22 +1,44 @@
 <?php
 
-    if(empty($_COOKIE['password'])){
-        header('Location: /php/example.php');
-    }
+session_start();
+
+  if($_SESSION['auth'] == false){
+    header('Location: /php/example.php');
+  }else if($_COOKIE['AUTH'] == false){
+    header('Location: /php/index1.php');
+  }
+
+  if(isset($_POST['logout'])){
+
+    $msg_logout = "<p>" . "Вы вышли из сессии" . "</p>";
+    setcookie('log_msg', $msg_logout, time() + 2, '/php/example.php');
+
+
+
+    $_SESSION['auth'] = false;
+
+    // чистим куки
+    setcookie('AUTH', false, -1, '/');
+    setcookie('username', $username_form, -1, '/');
+
+    // чистим массив $_SESSION
+    session_unset();
+    session_destroy();
+
+
+    $msg_logout = "<p>" . "Вы вышли из сессии" . "</p>";
+
+    header('Location: /php/example.php');
+}
+
 
      $msg_succesfully .= ("<p>" . "Вы успешно авторизировались," . $_COOKIE['username'] . "</p>");
     
 
-    if(isset($_POST['logout'])){
-        header('Location: /php/example.php');
-        $msg_logout = "<p>" . "Вы вышли из сессии" . "</p>";
-        setcookie('log_msg', $msg_logout, time() + 20, '/php/example.php');
-
-
-        // чистим куки
-        setcookie('username', $username_form, -1, '/');
-        setcookie('password', $_POST["password"], -1, '/');    
-    }
+   
+    // echo '<pre>';
+    // var_dump($_SESSION);
+    // echo '</pre>';
 
 ?>
 
@@ -36,7 +58,7 @@
     <!-- Кнопка выхода -->
     <form method="POST" action="<?php $_SERVER['PHP_SELF'] ?>" style="display: block;" accept-charset="UTF-8">
 
-      <div style="display: flex; justify-content:center;">
+      <div style="display: flex; justify-content: center;">
         <input type='submit' name='logout' value='Выйти' style="height: 50px;">
       </div>
 
@@ -48,3 +70,4 @@
 
 
 </body>
+
