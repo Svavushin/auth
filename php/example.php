@@ -68,6 +68,8 @@ if (($_SERVER["REQUEST_METHOD"] == "POST") && ($connect_sql)) {
       if (password_verify($password_form, $user['password'])) {
         
         session_start();
+
+        
         $_SESSION['auth'] = true;
         $_SESSION['username'] = $username_form;
   
@@ -127,7 +129,7 @@ if (($_SERVER["REQUEST_METHOD"] == "POST") && ($connect_sql)) {
 
 
       <div style="display: flex; justify-content:center; height:25px; margin-bottom:10px">
-        <input type="text" id='password' name="password"> <br> <br>
+        <input type="password" id='password' name="password"> <br> <br>
       </div>
 
 

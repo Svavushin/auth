@@ -5,7 +5,7 @@ session_start();
   if($_SESSION['auth'] == false){
     header('Location: /php/example.php');
   }else if($_COOKIE['AUTH'] == false){
-    header('Location: /php/index1.php');
+    header('Location: /php/example.php');
   }
 
   if(isset($_POST['logout'])){
