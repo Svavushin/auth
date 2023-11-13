@@ -3,10 +3,21 @@
 session_start();
 
   if($_SESSION['auth'] == false){
+
     header('Location: /php/example.php');
-  }else if($_COOKIE['AUTH'] == false){
+    session_destroy();
+    session_start();
+    session_regenerate_id();
+    
+  } else if($_COOKIE['AUTH'] == false){
+
     header('Location: /php/example.php');
-  }
+    session_destroy();
+    session_start();
+    session_regenerate_id();
+
+  } else {
+  
 
   if(isset($_POST['logout'])){
 
@@ -21,10 +32,11 @@ session_start();
     setcookie('AUTH', false, -1, '/');
     setcookie('username', $username_form, -1, '/');
 
-    // чистим массив $_SESSION
-    session_unset();
-    session_destroy();
+    // чистим массив $_SESSION и уничтожаем сессию
 
+    session_destroy();
+    session_start();
+    session_regenerate_id();
 
     $msg_logout = "<p>" . "Вы вышли из сессии" . "</p>";
 
@@ -39,7 +51,7 @@ session_start();
     // echo '<pre>';
     // var_dump($_SESSION);
     // echo '</pre>';
-
+  }
 ?>
 
 

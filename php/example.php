@@ -3,10 +3,19 @@ include 'db.php';
 session_start();
 
 if ($_SESSION['auth'] == true){
+  
   header('Location: /php/index1.php');
-} else if($_COOKIE['AUTH'] == true){
+  session_regenerate_id();
+
+} 
+
+else if($_COOKIE['AUTH'] == true){
+
   header('Location: /php/index1.php');
-}
+  session_regenerate_id();
+
+} 
+else {
 
 
 //проверяем подключение
@@ -67,6 +76,7 @@ if (($_SERVER["REQUEST_METHOD"] == "POST") && ($connect_sql)) {
       // чек паролей
       if (password_verify($password_form, $user['password'])) {
         
+        session_regenerate_id();
         session_start();
 
         
@@ -87,6 +97,8 @@ if (($_SERVER["REQUEST_METHOD"] == "POST") && ($connect_sql)) {
     } else {
       $error_user .= ('<p>' . "invalid user" . '</p>');
     }
+}
+
 }
 ?>
 
